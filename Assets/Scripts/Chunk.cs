@@ -4,7 +4,6 @@ using UnityEngine;
 public class Chunk : MonoBehaviour
 {
     public Vector2Int Coord { get; private set; }
-    private ChunkManager manager;
     private float animationSpeed;
     private Coroutine scaleRoutine;
 
@@ -46,6 +45,6 @@ public class Chunk : MonoBehaviour
             progress += Time.deltaTime * animationSpeed;
             yield return null;
         }
-        Destroy(gameObject); // 애니메이션 끝나면 오브젝트 파괴
+        Destroy(gameObject);
     }
 }

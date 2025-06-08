@@ -13,7 +13,7 @@ public class ChunkManager : MonoBehaviour
 
     void Update()
     {
-        Vector2Int mouseChunk = GetMouseChunkCoord();
+        Vector2Int mouseChunk = GetMouseChunkCoordinate();
         if (mouseChunk != currentCenter)
         {
             UpdateActiveChunks(mouseChunk);
@@ -21,7 +21,7 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
-    Vector2Int GetMouseChunkCoord()
+    Vector2Int GetMouseChunkCoordinate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
@@ -36,13 +36,16 @@ public class ChunkManager : MonoBehaviour
 
     void UpdateActiveChunks(Vector2Int center)
     {
-        HashSet<Vector2Int> required = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> required = new();
         for (int x = -1; x <= 1; x++)
+        {
             for (int y = -1; y <= 1; y++)
+            {
                 required.Add(center + new Vector2Int(x, y));
+            }
+        }
 
-        // 사라져야 할 청크 Release (애니메이션 후 Destroy)
-        List<Vector2Int> toRemove = new List<Vector2Int>();
+        List<Vector2Int> toRemove = new();
         foreach (var coord in activeChunks.Keys)
         {
             if (!required.Contains(coord))
@@ -51,10 +54,12 @@ public class ChunkManager : MonoBehaviour
                 toRemove.Add(coord);
             }
         }
-        foreach (var coord in toRemove)
-            activeChunks.Remove(coord);
 
-        // 새로 필요한 청크 생성
+        foreach (var coord in toRemove)
+        {
+            activeChunks.Remove(coord);
+        }
+
         foreach (var coord in required)
         {
             if (!activeChunks.ContainsKey(coord))
